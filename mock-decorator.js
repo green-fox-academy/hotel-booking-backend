@@ -67,6 +67,8 @@ const config = {
 
 const pool = new pg.Pool(config);
 
+const users = process.env.Users
+
 module.exports.query = function (text, values, callback) {
   console.log('query:', text, values);
   return pool.query(text, values, callback);
@@ -737,7 +739,7 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
   app.post('/api/login/', (req, res) => {
       const email = req.body.email;
       const password = req.body.password;
-      pool.query('SELECT * FROM hotel.users WHERE email = $1', [email], function(err, result) {
+      pool.query('SELECT * FROM ' + users + ' WHERE email = $1', [email], function(err, result) {
           if(err) {
                res.json({
                  'error': err.message
