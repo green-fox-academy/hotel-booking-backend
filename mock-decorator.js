@@ -739,8 +739,8 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
   app.pos('/api/login/', (req, res) => {
       const email = req.body.email;
       const password = req.body.password;
-      pool.query('SELECT * FROM ' + users, function(err, result) {
-          res.json(result)
+      pool.query('SELECT * FROM ' + users + ' WHERE email = $1', [email], function(err, result) {
+          res.send(result)
           // if(err) {
           //      res.json({
           //        'error': err.message
