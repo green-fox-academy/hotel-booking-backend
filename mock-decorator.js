@@ -741,23 +741,22 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
       const email = req.body.email;
       const password = req.body.password;
       pool.query('SELECT * FROM ' + users + ' WHERE email = $1', [email], function(err, result) {
-          res.send(result)
-          // if(err) {
-          //      res.json({
-          //        'error': err.message
-          //      });
-          // } else {
-          //     if(!result.rows[0]) {
-          //         res.status(400).send(invalidResponse);
-          //     } else if(password == result.rows[0].password) {
-          //         validResponse.data.attributes.id = result.rows[0].id;
-          //         validResponse.data.attributes.email = result.rows[0].email;
-          //         validResponse.data.attributes.password = result.rows[0].password;
-          //         res.json(validResponse)
-          //     } else {
-          //         res.status(400).send(invalidResponse);
-          //     }
-          // }
+          if(err) {
+               res.json({
+                 'error': err.message
+               });
+          } else {
+              if(!result.rows[0]) {
+                  res.status(400).send(invalidResponse);
+              } else if(password == result.rows[0].password) {
+                  validResponse.data.attributes.id = result.rows[0].id;
+                  validResponse.data.attributes.email = result.rows[0].email;
+                  validResponse.data.attributes.password = result.rows[0].password;
+                  res.json(validResponse)
+              } else {
+                  res.status(400).send(invalidResponse);
+              }
+          }
       })
   });
 
