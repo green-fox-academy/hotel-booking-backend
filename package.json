@@ -1,0 +1,20 @@
+{
+  "name": "hotel-booking-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "hotel-generator.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "cors": "^2.8.3",
+    "dotenv": "^4.0.0",
+    "express": "^4.15.3",
+    "path": "^0.12.7",
+    "pg": "^6.4.0"
+  }
+}
