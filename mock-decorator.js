@@ -808,7 +808,7 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
                     commonHotels.data[i].attributes = result.rows[i];
                 }
             }
-            res.send(result.rows);  
+            res.send(commonHotels);  
         });
     });  
 
