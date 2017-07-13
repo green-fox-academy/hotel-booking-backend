@@ -67,7 +67,9 @@ const config = {
 
 const pool = new pg.Pool(config);
 
-const users = process.env.Users
+const users = process.env.Users;
+const hotels = process.env.Hotels;
+const rooms = process.env.Rooms;
 
 module.exports.query = function (text, values, callback) {
   console.log('query:', text, values);
@@ -749,6 +751,17 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
       })
   });
 
+  app.get('/testhotels/', (req, res) => {
+      pool.query('SELECT * FROM ' + hotels, function(err, result) {
+          res.json(result.rows)
+      })
+  });
+  
+  app.get('/testrooms/', (req, res) => {
+      pool.query('SELECT * FROM ' + rooms, function(err, result) {
+          res.json(result.rows)
+      })
+  });
 
       app.post('/api/register/', (req, res) => {
           const email = req.body.data.attributes.email;
