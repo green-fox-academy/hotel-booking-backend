@@ -738,9 +738,9 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
     
 
   app.post('/api/login/', (req, res) => {
-      const email = req.body.email;
-      const password = req.body.password;
-      pool.query('SELECT * FROM ' + users, function(err, result) {
+      const email = req.body.data.attributes.email;
+      const password = req.body.data.attributes.password;
+      pool.query('SELECT * FROM ' + users + ' WHERE email = $1', [email], function(err, result) {
           if(err) {
                res.json({
                  'error': err.message
@@ -748,7 +748,7 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
           } else {
               if(!result.rows[0]) {
                   res.status(400).send(invalidResponse);
-              } else if(password == result.rows[2].password) {
+              } else if(password == result.rows[0].password) {
                   validResponse.data.attributes.id = result.rows[0].id;
                   validResponse.data.attributes.email = result.rows[0].email;
                   validResponse.data.attributes.password = result.rows[0].password;
