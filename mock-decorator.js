@@ -795,7 +795,8 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
         })
     });
 
-    app.get('/api/hotels/', (req, res) => {    
+    app.get('/api/hotels/', (req, res) => {
+        commonHotels = [];    
         pool.query('SELECT * FROM ' + hotels, function(err, result) {
             if(err) {
                 res.json({ 'error': err.message })
