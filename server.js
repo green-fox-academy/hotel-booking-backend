@@ -7,12 +7,14 @@ const path = require('path');
 const cors = require('cors');
 const pg = require('pg');
 
+require('dotenv').config()
+
 const config = {
   user: process.env.User, //env var: PGUSER 
   database: process.env.Database, //env var: PGDATABASE 
   password: process.env.Password, //env var: PGPASSWORD 
   host: process.env.Host, // Server hosting the postgres database 
-  port: process.env.Port, //env var: PGPORT 
+  port: process.env.Dataport, //env var: PGPORT 
   max: 10, // max number of clients in the pool 
   idleTimeoutMillis: 30000, // how long a client is allowed to remain idle before being closed 
 };
@@ -45,4 +47,4 @@ if (process.env.APP_ENV === 'MOCK') {
     mockServer(app);
 }
 
-app.listen(process.env.Port || 8080, () => console.log('server is running ' + process.env.Port ));
+app.listen(process.env.PORT, () => console.log('server is running ' + process.env.Port ));

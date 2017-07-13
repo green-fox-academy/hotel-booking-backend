@@ -51,6 +51,27 @@
                
 'use strict';
 
+const pg = require('pg');
+
+
+
+const config = {
+  user: process.env.User, //env var: PGUSER 
+  database: process.env.Database, //env var: PGDATABASE 
+  password: process.env.Password, //env var: PGPASSWORD 
+  host: process.env.Host, // Server hosting the postgres database 
+  port: process.env.Dataport, //env var: PGPORT 
+  max: 10, // max number of clients in the pool 
+  idleTimeoutMillis: 30000, // how long a client is allowed to remain idle before being closed 
+};
+
+const pool = new pg.Pool(config);
+
+module.exports.query = function (text, values, callback) {
+  console.log('query:', text, values);
+  return pool.query(text, values, callback);
+};
+
 const createHotels = require('./hotel-generator')
 
 const MockServer = function(app) {
@@ -717,9 +738,10 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
   app.post('/api/login/', (req, res) => {
       const email = req.body.email;
       const password = req.body.password;
-      pool.query('SELECT type, email, password FROM hotel WHERE email = $1 ', [email], function(err, result) {
+      pool.query('SELECT * FROM hotel WHERE email = $1 ', [email], function(err, result) {
         res.send('alma')
       })
+      // res.send('alma')
   });
 
     app.post('/api/register/', (req, res) => {
