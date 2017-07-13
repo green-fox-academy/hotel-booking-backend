@@ -726,17 +726,6 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
         }]
     }
 
-    // app.post('/api/login/', (req, res) => {
-    //     const email = req.body.data.attributes.email;
-    //     const password = req.body.data.attributes.password;
-    //     if ((email === user.data.attributes.email && password === user.data.attributes.password) || (email === user2.data.attributes.email && password === user2.data.attributes.password)) {
-    //         res.send(validResponse);
-    //     } else {
-    //         res.status(400).send(invalidResponse);
-    //     }
-    // });
-    
-
   app.post('/api/login/', (req, res) => {
       const email = req.body.data.attributes.email;
       const password = req.body.data.attributes.password;
@@ -761,14 +750,41 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
   });
 
 
+      app.post('/api/register/', (req, res) => {
+        const email = req.body.data.attributes.email;
+        const password = req.body.data.attributes.password;
+        pool.query('SELECT * FROM ' + users + ' WHERE email = $1', [email], function(err, result) {
+          if(err) {
+              res.json({
+                 'error': err.message
+               });
+          } else {
+              if(!result.rows[0]) {
+                  pool.query('INSERT INTO ' + users + '(email, password) VALUES($1, $2)', [email, password], function(err, result) {
+                      if(err) {
+                          res.json({
+                            'error': err.message
+                          });
+                      } else {
+                          validResponse.data.attributes.id = result.rows[0].id;
+                          validResponse.data.attributes.email = result.rows[0].email;
+                          validResponse.data.attributes.password = result.rows[0].password;
+                          res.json(validResponse);
+                      }
+                  });
+              }
+          }
+        })
+      });
 
-    app.post('/api/register/', (req, res) => {
-        regResponse.data.type = req.body.data.type;
-        regResponse.data.attributes.email = req.body.data.attributes.email;
-        user2.data.attributes.email = req.body.data.attributes.email;
-        user2.data.attributes.password = req.body.data.attributes.password;
-        res.status(201).send(regResponse);
-    });
+
+    // app.post('/api/register/', (req, res) => {
+    //     regResponse.data.type = req.body.data.type;
+    //     regResponse.data.attributes.email = req.body.data.attributes.email;
+    //     user2.data.attributes.email = req.body.data.attributes.email;
+    //     user2.data.attributes.password = req.body.data.attributes.password;
+    //     res.status(201).send(regResponse);
+    // });
 
     app.get('/api/hotels/', (req, res) => res.send(hotelResponse));
 
