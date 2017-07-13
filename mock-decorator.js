@@ -1,35 +1,36 @@
-// commonHotel = {
-//   meal_plan: 'american plan',
-//               links: {
-//             self: 'https://two-ferns.glitch.me/hotels/'
-//         },
-//         data: [{
-//             type: 'hotels',
-//             id: '1',
+'use strict';
 
-//             attributes: {
-//                 hotel_id: 
-//                 location: 'Bone City',
-//                 longitude:
-//                 latitude:
-//                 name: 'Dog Heaven', === title
-//                 main_image_src: 'http://placebacon.net/300/300?image=1',
-//                 has_wifi: true,
-//                 has_parking: false,
-//                 has_pets: true,
-//                 has_restaurant: false,
-//                 has_bar: false,
-//                 has_swimming_pool: false,
-//                 has_air_conditioning: false,
-//                 has_gym: true,
-//                 user_id: '1',
-//                 booking_id: '1',
-//                 amount: '50',
-//                 currency: 'USD',
-//                 status: 'pending',
-//                 stars: '3'
-//             }
-// }
+let commonHotels = {
+    links: {
+        self: 'https://two-ferns.glitch.me/hotels/'
+    },
+    data: [{
+        type: 'hotels',
+        hotel_id: '1',
+        attributes: {
+            location: '',
+            longitude: '',
+            latitude: '',
+            name: '',
+            main_image_src: 'http://placebacon.net/300/300?image=1',
+            has_wifi: false,
+            has_parking: false,
+            has_pets: false,
+            has_restaurant: false,
+            meal_plan: '',
+            has_bar: false,
+            has_swimming_pool: false,
+            has_air_conditioning: false,
+            has_gym: false,
+            user_id: '1',
+            booking_id: '1',
+            amount: '50',
+            currency: 'USD',
+            status: 'pending',
+            stars: ''
+        }
+    }]
+};
                
 // commonRoom = 
 //       data: [{
@@ -47,9 +48,6 @@
 //                 description: "That malfunctioning little twerp. This is all his fault! He tricked me into going this way, but he'll do no better. Wait, what's that? A transport! I'm saved! Over here! Help! Please, help! Artoo-Detoo! It's you! It's you!",
 //                 max_occupancy: '2'
 //             }
-               
-               
-'use strict';
 
 const pg = require('pg');
 require('dotenv').config()
@@ -728,78 +726,87 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
         }]
     }
 
-  app.post('/api/login/', (req, res) => {
-      const email = req.body.data.attributes.email;
-      const password = req.body.data.attributes.password;
-      pool.query('SELECT * FROM ' + users + ' WHERE email = $1', [email], function(err, result) {
-          if(err) {
-               res.json({
-                 'error': err.message
-               });
-          } else {
-              if(!result.rows[0]) {
-                  res.status(400).send(invalidResponse);
-              } else if(password == result.rows[0].password) {
-                  validResponse.data.attributes.id = result.rows[0].id;
-                  validResponse.data.attributes.email = result.rows[0].email;
-                  validResponse.data.attributes.password = result.rows[0].password;
-                  res.json(validResponse)
-              } else {
-                  res.status(400).send(invalidResponse);
-              }
-          }
-      })
-  });
+    //----------USER FRONTEND TEST ENDPOINT------------------
+    app.get('/testhotels/', (req, res) => {
+        pool.query('SELECT * FROM ' + hotels, function(err, result) {
+            res.json(result.rows)
+        })
+    });
+    
+    app.get('/testrooms/', (req, res) => {
+        pool.query('SELECT * FROM ' + rooms, function(err, result) {
+            res.json(result.rows)
+        })
+    });
+    //--------------------------------------------------------
 
-  app.get('/testhotels/', (req, res) => {
-      pool.query('SELECT * FROM ' + hotels, function(err, result) {
-          res.json(result.rows)
-      })
-  });
-  
-  app.get('/testrooms/', (req, res) => {
-      pool.query('SELECT * FROM ' + rooms, function(err, result) {
-          res.json(result.rows)
-      })
-  });
-
-      app.post('/api/register/', (req, res) => {
-          const email = req.body.data.attributes.email;
-          const password = req.body.data.attributes.password;
-          pool.query('SELECT * FROM ' + users + ' WHERE email = $1', [email], function(err, result) {
+    app.post('/api/login/', (req, res) => {
+        const email = req.body.data.attributes.email;
+        const password = req.body.data.attributes.password;
+        pool.query('SELECT * FROM ' + users + ' WHERE email = $1', [email], function(err, result) {
             if(err) {
                 res.json({
                   'error': err.message
                 });
             } else {
                 if(!result.rows[0]) {
-                    pool.query('INSERT INTO ' + users + '(email, password) VALUES($1, $2) RETURNING *', [email, password], function(err, result) {
-                        if(err) {
-                            res.json({
-                              'error': err.message
-                            });
-                        } else {
-                             validResponse.data.attributes.id = result.rows[0].id;
-                             validResponse.data.attributes.email = result.rows[0].email;
-                             validResponse.data.attributes.password = result.rows[0].password;
-                            res.json(validResponse);
-                        }
-                    });
+                    res.status(400).send(invalidResponse);
+                } else if(password == result.rows[0].password) {
+                    validResponse.data.attributes.id = result.rows[0].id;
+                    validResponse.data.attributes.email = result.rows[0].email;
+                    validResponse.data.attributes.password = result.rows[0].password;
+                    res.json(validResponse)
+                } else {
+                    res.status(400).send(invalidResponse);
                 }
             }
-          })
-      });
+        })
+    });
 
 
-    // app.post('/api/register/', (req, res) => {
-    //     regResponse.data.type = req.body.data.type;
-    //     regResponse.data.attributes.email = req.body.data.attributes.email;
-    //     user2.data.attributes.email = req.body.data.attributes.email;
-    //     user2.data.attributes.password = req.body.data.attributes.password;
-    //     res.status(201).send(regResponse);
-    // });
+  //
 
-    app.get('/api/hotels/', (req, res) => res.send(hotelResponse));
+    app.post('/api/register/', (req, res) => {
+        const email = req.body.data.attributes.email;
+        const password = req.body.data.attributes.password;
+        pool.query('SELECT * FROM ' + users + ' WHERE email = $1', [email], function(err, result) {
+          if(err) {
+              res.json({
+                'error': err.message
+              });
+          } else {
+              if(!result.rows[0]) {
+                  pool.query('INSERT INTO ' + users + '(email, password) VALUES($1, $2) RETURNING *', [email, password], function(err, result) {
+                      if(err) {
+                          res.json({
+                            'error': err.message
+                          });
+                      } else {
+                            validResponse.data.attributes.id = result.rows[0].id;
+                            validResponse.data.attributes.email = result.rows[0].email;
+                            validResponse.data.attributes.password = result.rows[0].password;
+                          res.json(validResponse);
+                      }
+                  });
+              }
+          }
+        })
+    });
+
+    app.get('/api/hotels/', (req, res) => {    
+        pool.query('SELECT * FROM ' + hotels, function(err, result) {
+            if(err) {
+                res.json({ 'error': err.message })
+            } else {
+                commonHotels.data.attributes = result.rows;
+                for (let i = 0; i < result.rows.length; i++) {
+                    commonHotels.data[i].id = result.rows[i].id;
+                    commonHotels.data[i].type = result.rows[i].type;
+                }
+            }
+            res.send(commonHotels);  
+        });
+    });  
 
   
   // NORMA FRONTEND NOT WORKING
