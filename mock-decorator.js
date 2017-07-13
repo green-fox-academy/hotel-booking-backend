@@ -751,30 +751,30 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
 
 
       app.post('/api/register/', (req, res) => {
-        const email = req.body.data.attributes.email;
-        const password = req.body.data.attributes.password;
-        pool.query('SELECT * FROM ' + users + ' WHERE email = $1', [email], function(err, result) {
-          if(err) {
-              res.json({
-                 'error': err.message
-               });
-          } else {
-              if(!result.rows[0]) {
-                  pool.query('INSERT INTO ' + users + '(email, password) VALUES($1, $2)', [email, password], function(err, result) {
-                      if(err) {
-                          res.json({
-                            'error': err.message
-                          });
-                      } else {
-                          validResponse.data.attributes.id = result.rows[0].id;
-                          validResponse.data.attributes.email = result.rows[0].email;
-                          validResponse.data.attributes.password = result.rows[0].password;
-                          res.json(validResponse);
-                      }
-                  });
-              }
-          }
-        })
+          const email = req.body.data.attributes.email;
+          const password = req.body.data.attributes.password;
+          pool.query('SELECT * FROM ' + users + ' WHERE email = $1', [email], function(err, result) {
+            if(err) {
+                res.json({
+                  'error': err.message
+                });
+            } else {
+                if(!result.rows[0]) {
+                    pool.query('INSERT INTO ' + users + '(email, password) VALUES($1, $2) RETURNING *', [email, password], function(err, result) {
+                        if(err) {
+                            res.json({
+                              'error': err.message
+                            });
+                        } else {
+                             validResponse.data.attributes.id = result.rows[0].id;
+                             validResponse.data.attributes.email = result.rows[0].email;
+                             validResponse.data.attributes.password = result.rows[0].password;
+                            res.json(validResponse);
+                        }
+                    });
+                }
+            }
+          })
       });
 
 
