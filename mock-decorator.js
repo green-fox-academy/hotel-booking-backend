@@ -4,33 +4,35 @@ let commonHotels = {
     links: {
         self: 'https://two-ferns.glitch.me/hotels/'
     },
-    data: [{
-        type: 'hotels',
-        hotel_id: '1',
-        attributes: {
-            location: '',
-            longitude: '',
-            latitude: '',
-            name: '',
-            main_image_src: 'http://placebacon.net/300/300?image=1',
-            has_wifi: false,
-            has_parking: false,
-            has_pets: false,
-            has_restaurant: false,
-            meal_plan: '',
-            has_bar: false,
-            has_swimming_pool: false,
-            has_air_conditioning: false,
-            has_gym: false,
-            user_id: '1',
-            booking_id: '1',
-            amount: '50',
-            currency: 'USD',
-            status: 'pending',
-            stars: ''
-        }
-    }]
+    data: []
 };
+
+let hotelSample = {
+    type: 'hotels',
+    hotel_id: '1',
+    attributes: {
+        location: '',
+        longitude: '',
+        latitude: '',
+        name: '',
+        main_image_src: 'http://placebacon.net/300/300?image=1',
+        has_wifi: false,
+        has_parking: false,
+        has_pets: false,
+        has_restaurant: false,
+        meal_plan: '',
+        has_bar: false,
+        has_swimming_pool: false,
+        has_air_conditioning: false,
+        has_gym: false,
+        user_id: '1',
+        booking_id: '1',
+        amount: '50',
+        currency: 'USD',
+        status: 'pending',
+        stars: ''
+    }
+}
                
 // commonRoom = 
 //       data: [{
@@ -798,10 +800,11 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
             if(err) {
                 res.json({ 'error': err.message })
             } else {
-                commonHotels.data.attributes = result.rows;
                 for (let i = 0; i < result.rows.length; i++) {
-                    commonHotels.data[i].id = result.rows[i].id;
-                    commonHotels.data[i].type = result.rows[i].type;
+                    commonHotels.data.push(hotelSample)
+                    commonHotels.data[i].attributes = result.rows[i];
+                    // commonHotels.data[i].id = result.rows[i].id;
+                    // commonHotels.data[i].type = result.rows[i].type;
                 }
             }
             res.send(commonHotels);  
