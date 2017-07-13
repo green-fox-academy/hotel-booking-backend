@@ -52,7 +52,7 @@
 'use strict';
 
 const pg = require('pg');
-
+require('dotenv').config()
 
 
 const config = {
@@ -534,9 +534,8 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
         data: {
            type: "admin",
            attributes: {
-             id: "1",
-             email: "john.doe@example.org",
-             admin: false,
+             id: "",
+             email: "",
              token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IlRlc3RBZG1pbiIsImFkbWluIjp0cnVlfQ.nhC1EDI5xLGM4yZL2VMZyvHcbcWiXM2RVS7Y8Pt0Zuk'
            }
        }
@@ -738,10 +737,24 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
   app.post('/api/login/', (req, res) => {
       const email = req.body.email;
       const password = req.body.password;
-      pool.query('SELECT * FROM hotel WHERE email = $1 ', [email], function(err, result) {
-        res.send('alma')
+      pool.query('SELECT * FROM hotel.users WHERE email = $1', [email], function(err, result) {
+          if(err) {
+               res.json({
+                 'error': err.message
+               });
+          } else {
+              if(!result.rows[0]) {
+                  res.status(400).send(invalidResponse);
+              } else if(password == result.rows[0].password) {
+                  validResponse.data.attributes.id = result.rows[0].id;
+                  validResponse.data.attributes.email = result.rows[0].email;
+                  validResponse.data.attributes.password = result.rows[0].password;
+                  res.json(validResponse)
+              } else {
+                  res.status(400).send(invalidResponse);
+              }
+          }
       })
-      // res.send('alma')
   });
 
     app.post('/api/register/', (req, res) => {
