@@ -794,8 +794,57 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
 			}
 		})
     });
-	
 
+	app.get('/mapsearch', (req, res) => {
+        pool.query('SELECT * FROM ' + hotels, function(err, rows) {
+			if(err) {
+                res.json({
+                  'error': err.message
+                });
+			} else {
+				let responseObject = {
+					data: []
+				}
+				rows.forEach(el => {
+					locData = {
+						latitude: el.latitude,
+						longitude: el.longitude,
+						name: el.name,
+						id: el.hotel_id
+					}
+					responseObject.data.push(locData)
+				})
+				res.json(responseObject)
+			}
+		})
+    });
+
+	app.get('/roomfeatures/:id', (req, res) => {
+		const roomId = req.params.id;
+        pool.query('SELECT * FROM ' + hotels, function(err, rows) {
+			if(err) {
+                res.json({
+                  'error': err.message
+                });
+			} else {
+				if (roomId === rows.room_id) {
+					let responseObject = {
+						data: {
+							has_wifi: rows.has_wifi,
+							has_parking: rows.has_parking,
+							has_pets: rows.has_pets,
+							has_restaurant: rows.has_restaurant,
+							has_bar: rows.has_bar,
+							has_swimming_pool: rows.has_swimming_pool,
+							has_air_conditioning: rows.has_air_conditioning,
+							has_gym: rows.has_gym,
+						}
+					}
+				}	
+				res.json(responseObject)
+			}
+		})
+    });
 
     //--------------------------------------------------------
 
