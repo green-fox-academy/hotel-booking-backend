@@ -726,18 +726,55 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
         }]
     }
 
-    //----------USER FRONTEND TEST ENDPOINT------------------
+    //----------USER FRONTEND NEW ENDPOINTS------------------
     app.get('/testhotels/', (req, res) => {
-        pool.query('SELECT * FROM ' + hotels, function(err, result) {
+        pool.query('SELECT * FROM ' + hotels, function(err, rows) {
             res.json(result.rows)
         })
     });
     
     app.get('/testrooms/', (req, res) => {
-        pool.query('SELECT * FROM ' + rooms, function(err, result) {
+        pool.query('SELECT * FROM ' + rooms, function(err, rows) {
             res.json(result.rows)
         })
     });
+
+	function compare(a,b) {
+		if (a.stars < b.stars)
+			return -1;
+		if (a.stars > b.stars)
+			return 1;
+		return 0;
+	}
+
+	app.get('/toprooms', (req, res) => {
+        pool.query('SELECT * FROM ' + rooms, function(err, rows) {
+			if(err) {
+                res.json({
+                  'error': err.message
+                });
+			} else {
+				let responseObject = {
+					data: []
+				}
+				let topThree = rows.sort(compare).slice(0,3);
+				topThree.forEach(el => {
+					let topHotel = {
+					image: el.image,
+					name: el.room_name,
+					price: el.price,
+					desription: el.decription
+				}
+				responseObject.data.push(topThree)
+				})
+				res.json(responseObject)
+			}
+        })
+    });
+
+	
+
+
     //--------------------------------------------------------
 
     app.post('/api/login/', (req, res) => {
