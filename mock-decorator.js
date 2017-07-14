@@ -846,6 +846,98 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
 		})
     });
 
+	app.get('/hotel-slider', (req, res) => {
+        pool.query('SELECT * FROM ' + hotels, function(err, rows) {
+			if(err) {
+                res.json({
+                  'error': err.message
+                });
+			} else {
+				let responseObject = {
+					data: []
+				}
+				rows.forEach(el => {
+					hotelImage = {
+					image: el.main_image_src,
+					title: el.name,
+					subtitle: el.location,
+					}
+					responseObject.data.push(hotelImage)
+				})
+				res.json(responseObject)
+			}
+		})
+    });
+
+	app.get('/room-slider', (req, res) => {
+        pool.query('SELECT * FROM ' + rooms, function(err, rows) {
+			if(err) {
+                res.json({
+                  'error': err.message
+                });
+			} else {
+				let responseObject = {
+					data: []
+				}
+				rows.forEach(el => {
+					roomImage = {
+					image: el.image,
+					title: el.name,
+					subtitle: el.subtitle,
+					}
+					responseObject.data.push(roomImage)
+				})
+				res.json(responseObject)
+			}
+		})
+    });
+
+	app.get('/hotel-search', (req, res) => {
+        pool.query('SELECT * FROM ' + hotels, function(err, rows) {
+			if(err) {
+                res.json({
+                  'error': err.message
+                });
+			} else {
+				let responseObject = {
+					data: []
+				}
+				rows.forEach(el => {
+					hotelData = {
+					type: xhrResponse[i].type,
+						attributes: {
+							hotel_id: el.hotel_id,
+							location: el.location,
+							longitude: el.longitude,
+							latitude: el.latitude,
+							name: el.name,
+							main_image_src: el.main_image_src,
+							has_wifi: el.has_wifi,
+							has_parking: el.has_parking,
+							has_pets: el.has_pets,
+							has_restaurant: el.has_restaurant,
+							has_bar: el.has_bar,
+							has_swimming_pool: el.has_swimming_pool,
+							has_air_conditioning: el.has_air_conditioning,
+							has_gym: el.has_gym,
+							meal_plan: el.meal_plan,
+							user_id: el.user_id,
+							booking_id: el.booking_id,
+							amount: el.amount,
+							currency: el.currency,
+							status: el.status,
+							stars: el.stars
+						}
+					}
+					responseObject.data.push(hotelData)
+				})
+				res.json(responseObject)
+			}
+				
+		})
+	})
+
+
     //--------------------------------------------------------
 
     app.post('/api/login/', (req, res) => {
