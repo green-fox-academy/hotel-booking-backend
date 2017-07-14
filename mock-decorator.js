@@ -852,13 +852,15 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
   
      app.delete('/api/hotels/:id', (req, res) => {
         const hotelID = req.params.id;
-        hotelResponse.data.forEach((hotel, index) => {
-            if (hotelID == hotel.id) {
-                hotelResponse.data = hotelResponse.data.filter(e => e !== hotel)
-                res.status(200).send(hotelResponse.links);
+        pool.query('DELETE FROM ' + hotels +' WHERE hotel_id = $1', [hotelID]), function(err, result) {
+            if(err) {
+                res.json({
+                'error': err.message
+                });
+            } else {
+                res.send(result)
             }
-        });
-        res.status(404).send(hotelError);
+        }
     });
 
     app.patch('/api/hotels/:id', (req, res) => {
