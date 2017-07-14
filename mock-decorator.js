@@ -36,24 +36,24 @@ let hotelSample = {
 
 let commonRoom = {
     links: {
-        self: ‘https://two-ferns.glitch.me/hotels/:id/relationships/rooms'
+        self: 'https://two-ferns.glitch.me/hotels/:id/relationships/rooms'
     },
     data: []
 };
 
 let roomSample = {
-    type: ‘rooms’,
-    room_id: ‘’,
-    hotel_id: ‘’,
+    type: 'rooms',
+    room_id: '',
+    hotel_id: '',
     attributes: {
-        room_id: ‘’,
-        price: ‘’,
-        currency: ‘’,
-        room_name: ‘’,
-        subtitle: ‘’,
-        image: ‘http://placebear.net/300/300?image=1’,
-        description: ‘’,
-        max_occupancy: ‘’
+        room_id: '',
+        price: '',
+        currency: '',
+        room_name: '',
+        subtitle: '',
+        image: 'http://placebear.net/300/300?image=1',
+        description: '',
+        max_occupancy: ''
     }
 };
 
@@ -896,8 +896,8 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
                     commonRoom.data[i].type = result.rows[i].type;
                     commonRoom.data[i].attributes = result.rows[i];
                 }
+            res.send(roomResponse);
             }
-        res.send(roomResponse)
         });
     });
   
