@@ -34,7 +34,7 @@ let hotelSample = {
     }
 }
 
-let commonRoom = {
+let commonRooms = {
     links: {
         self: 'https://two-ferns.glitch.me/hotels/:id/relationships/rooms'
     },
@@ -885,18 +885,19 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
     })
   
     app.get('/api/hotels/:hotelId/relationships/rooms', (req, res) => {
+        commonRooms.data = [];
         pool.query('SELECT * FROM ' + rooms, function(err, result) {
             if (err) {
                 res.json({ 'error': err.message })
             } else {
                 for (let i = 0; i < result.rows.length; i++) {
-                    commonRoom.data.push(Object.assign({}, roomSample))
-                    commonRoom.data[i].hotel_id = result.rows[i].hotel_id;
-                    commonRoom.data[i].room_id = result.rows[i].room_id;
-                    commonRoom.data[i].type = result.rows[i].type;
-                    commonRoom.data[i].attributes = result.rows[i];
+                    commonRooms.data.push(Object.assign({}, roomSample))
+                    commonRooms.data[i].hotel_id = result.rows[i].hotel_id;
+                    commonRooms.data[i].room_id = result.rows[i].room_id;
+                    commonRooms.data[i].type = result.rows[i].type;
+                    commonRooms.data[i].attributes = result.rows[i];
                 }
-            res.send(roomResponse);
+            res.send(commonRooms);
             }
         });
     });
