@@ -802,13 +802,13 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
                 res.json({ 'error': err.message })
             } else {
                 for (let i = 0; i < result.rows.length; i++) {
-                    commonHotels.data.push(hotelSample)
+                    commonHotels.data.push(Object.assign({}, hotelSample))
                     commonHotels.data[i].hotel_id = result.rows[i].hotel_id;
                     commonHotels.data[i].type = result.rows[i].type;
-                    commonHotels.data[i].attributes = result.rows[i];
+                    commonHotels.data[i].attributes = Object.assign(result.rows[i])
                 }
+                res.send(commonHotels);                  
             }
-            res.send(commonHotels);  
         });
     });  
 
