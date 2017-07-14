@@ -734,18 +734,218 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
         }]
     }
 
-    //----------USER FRONTEND TEST ENDPOINT------------------
+    //----------USER FRONTEND NEW ENDPOINTS------------------
     app.get('/testhotels/', (req, res) => {
-        pool.query('SELECT * FROM ' + hotels, function(err, result) {
+        pool.query('SELECT * FROM ' + hotels, function(err, rows) {
             res.json(result.rows)
         })
     });
     
     app.get('/testrooms/', (req, res) => {
-        pool.query('SELECT * FROM ' + rooms, function(err, result) {
+        pool.query('SELECT * FROM ' + rooms, function(err, rows) {
             res.json(result.rows)
         })
     });
+
+	function compare(a,b) {
+		if (a.stars < b.stars)
+			return -1;
+		if (a.stars > b.stars)
+			return 1;
+		return 0;
+	}
+
+	app.get('/toprooms', (req, res) => {
+        pool.query('SELECT * FROM ' + rooms, function(err, rows) {
+			if(err) {
+                res.json({
+                  'error': err.message
+                });
+			} else {
+				let responseObject = {
+					data: []
+				}
+				let topThree = rows.sort(compare).slice(0,3);
+				topThree.forEach(el => {
+					let topHotel = {
+					image: el.image,
+					name: el.room_name,
+					price: el.price,
+					desription: el.decription
+					}
+					responseObject.data.push(topHotel)
+				})
+				res.json(responseObject)
+			}
+        })
+    });
+
+	app.get('/roomdetails', (req, res) => {
+        pool.query('SELECT * FROM ' + rooms, function(err, rows) {
+			if(err) {
+                res.json({
+                  'error': err.message
+                });
+			} else {
+				let responseObject = {
+					data: []
+				}
+				rows.forEach(el => {
+					roomDetail = {
+						title: el.room_name,
+						description: el.decription,
+						id: el.room_id
+					}
+					responseObject.data.push(roomDetail)
+				})
+				res.json(responseObject)
+			}
+		})
+    });
+
+	app.get('/mapsearch', (req, res) => {
+        pool.query('SELECT * FROM ' + hotels, function(err, rows) {
+			if(err) {
+                res.json({
+                  'error': err.message
+                });
+			} else {
+				let responseObject = {
+					data: []
+				}
+				rows.forEach(el => {
+					locData = {
+						latitude: el.latitude,
+						longitude: el.longitude,
+						name: el.name,
+						id: el.hotel_id
+					}
+					responseObject.data.push(locData)
+				})
+				res.json(responseObject)
+			}
+		})
+    });
+
+	app.get('/roomfeatures/:id', (req, res) => {
+		const roomId = req.params.id;
+        pool.query('SELECT * FROM ' + hotels, function(err, rows) {
+			if(err) {
+                res.json({
+                  'error': err.message
+                });
+			} else {
+				if (roomId === rows.room_id) {
+					let responseObject = {
+						data: {
+							has_wifi: rows.has_wifi,
+							has_parking: rows.has_parking,
+							has_pets: rows.has_pets,
+							has_restaurant: rows.has_restaurant,
+							has_bar: rows.has_bar,
+							has_swimming_pool: rows.has_swimming_pool,
+							has_air_conditioning: rows.has_air_conditioning,
+							has_gym: rows.has_gym,
+						}
+					}
+				}	
+				res.json(responseObject)
+			}
+		})
+    });
+
+	app.get('/hotel-slider', (req, res) => {
+        pool.query('SELECT * FROM ' + hotels, function(err, rows) {
+			if(err) {
+                res.json({
+                  'error': err.message
+                });
+			} else {
+				let responseObject = {
+					data: []
+				}
+				rows.forEach(el => {
+					hotelImage = {
+					image: el.main_image_src,
+					title: el.name,
+					subtitle: el.location,
+					}
+					responseObject.data.push(hotelImage)
+				})
+				res.json(responseObject)
+			}
+		})
+    });
+
+	app.get('/room-slider', (req, res) => {
+        pool.query('SELECT * FROM ' + rooms, function(err, rows) {
+			if(err) {
+                res.json({
+                  'error': err.message
+                });
+			} else {
+				let responseObject = {
+					data: []
+				}
+				rows.forEach(el => {
+					roomImage = {
+					image: el.image,
+					title: el.name,
+					subtitle: el.subtitle,
+					}
+					responseObject.data.push(roomImage)
+				})
+				res.json(responseObject)
+			}
+		})
+    });
+
+	app.get('/hotel-search', (req, res) => {
+        pool.query('SELECT * FROM ' + hotels, function(err, rows) {
+			if(err) {
+                res.json({
+                  'error': err.message
+                });
+			} else {
+				let responseObject = {
+					data: []
+				}
+				rows.forEach(el => {
+					hotelData = {
+					type: xhrResponse[i].type,
+						attributes: {
+							hotel_id: el.hotel_id,
+							location: el.location,
+							longitude: el.longitude,
+							latitude: el.latitude,
+							name: el.name,
+							main_image_src: el.main_image_src,
+							has_wifi: el.has_wifi,
+							has_parking: el.has_parking,
+							has_pets: el.has_pets,
+							has_restaurant: el.has_restaurant,
+							has_bar: el.has_bar,
+							has_swimming_pool: el.has_swimming_pool,
+							has_air_conditioning: el.has_air_conditioning,
+							has_gym: el.has_gym,
+							meal_plan: el.meal_plan,
+							user_id: el.user_id,
+							booking_id: el.booking_id,
+							amount: el.amount,
+							currency: el.currency,
+							status: el.status,
+							stars: el.stars
+						}
+					}
+					responseObject.data.push(hotelData)
+				})
+				res.json(responseObject)
+			}
+				
+		})
+	})
+
+
     //--------------------------------------------------------
 
     app.post('/api/login/', (req, res) => {
