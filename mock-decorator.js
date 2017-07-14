@@ -764,14 +764,36 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
 					name: el.room_name,
 					price: el.price,
 					desription: el.decription
-				}
-				responseObject.data.push(topThree)
+					}
+					responseObject.data.push(topHotel)
 				})
 				res.json(responseObject)
 			}
         })
     });
 
+	app.get('/roomdetails', (req, res) => {
+        pool.query('SELECT * FROM ' + rooms, function(err, rows) {
+			if(err) {
+                res.json({
+                  'error': err.message
+                });
+			} else {
+				let responseObject = {
+					data: []
+				}
+				rows.forEach(el => {
+					roomDetail = {
+						title: el.room_name,
+						description: el.decription,
+						id: el.room_id
+					}
+					responseObject.data.push(roomDetail)
+				})
+				res.json(responseObject)
+			}
+		})
+    });
 	
 
 
