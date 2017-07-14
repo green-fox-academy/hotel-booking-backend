@@ -33,23 +33,29 @@ let hotelSample = {
         stars: ''
     }
 }
-               
-// commonRoom = 
-//       data: [{
-//             type: 'rooms',
-//             id: '1',
-//             hotel_id: 
 
-//             attributes: {
-//                 room_id: 1
-//                 price: '12',
-//                 currency: 'EUR',
-//                 room_name: 'Owen Lars', === title
-//                 subtitle: 
-//                 image: 
-//                 description: "That malfunctioning little twerp. This is all his fault! He tricked me into going this way, but he'll do no better. Wait, what's that? A transport! I'm saved! Over here! Help! Please, help! Artoo-Detoo! It's you! It's you!",
-//                 max_occupancy: '2'
-//             }
+let commonRoom = {
+    links: {
+        self: ‘https://two-ferns.glitch.me/hotels/:id/relationships/rooms'
+    },
+    data: []
+};
+
+let roomSample = {
+    type: ‘rooms’,
+    room_id: ‘’,
+    hotel_id: ‘’,
+    attributes: {
+        room_id: ‘’,
+        price: ‘’,
+        currency: ‘’,
+        room_name: ‘’,
+        subtitle: ‘’,
+        image: ‘http://placebear.net/300/300?image=1’,
+        description: ‘’,
+        max_occupancy: ‘’
+    }
+};
 
 const pg = require('pg');
 require('dotenv').config()
@@ -878,7 +884,22 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
         res.status(201).send(req.body);
     })
   
-    app.get('/api/hotels/:hotelId/relationships/rooms', (req, res) => res.send(roomResponse))
+    app.get('/api/hotels/:hotelId/relationships/rooms', (req, res) => {
+        pool.query('SELECT * FROM ' + rooms, function(err, result) {
+            if (err) {
+                res.json({ 'error': err.message })
+            } else {
+                for (let i = 0; i < result.rows.length; i++) {
+                    commonRoom.data.push(Object.assign({}, roomSample))
+                    commonRoom.data[i].hotel_id = result.rows[i].hotel_id;
+                    commonRoom.data[i].room_id = result.rows[i].room_id;
+                    commonRoom.data[i].type = result.rows[i].type;
+                    commonRoom.data[i].attributes = result.rows[i];
+                }
+            }
+        res.send(roomResponse)
+        });
+    });
   
     app.delete('/api/hotels/:hotelId/relationships/rooms/:roomId', (req, res) => {
         const roomID = req.params.roomId;
