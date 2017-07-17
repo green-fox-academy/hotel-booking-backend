@@ -1056,11 +1056,12 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
             if(err) {
                 res.json({
                 'error': err.message
-                });
+                }); 
             } else {
-                res.send(result)
+                res.send('alma')
             }
         }
+        res.send('bela')
     });
 
     app.patch('/api/hotels/:id', (req, res) => {
