@@ -765,7 +765,7 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
 				let responseObject = {
 					data: []
 				}
-				let topThree = rows.sort(compare).slice(0,3);
+				let topThree = result.rows.sort(compare).slice(0,3);
 				topThree.forEach(el => {
 					let topHotel = {
 					image: el.image,
@@ -790,7 +790,7 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
 				let responseObject = {
 					data: []
 				}
-				rows.forEach(el => {
+				result.rows.forEach(el => {
 					roomDetail = {
 						title: el.room_name,
 						description: el.decription,
@@ -813,7 +813,7 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
 				let responseObject = {
 					data: []
 				}
-				rows.forEach(el => {
+				result.rows.forEach(el => {
 					locData = {
 						latitude: el.latitude,
 						longitude: el.longitude,
@@ -835,7 +835,7 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
                   'error': err.message
                 });
 			} else {
-				if (roomId === rows.room_id) {
+				if (roomId === result.rows.room_id) {
 					let responseObject = {
 						data: {
 							has_wifi: rows.has_wifi,
@@ -864,7 +864,7 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
 				let responseObject = {
 					data: []
 				}
-				rows.forEach(el => {
+				result.rows.forEach(el => {
 					hotelImage = {
 					image: el.main_image_src,
 					title: el.name,
@@ -887,7 +887,7 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
 				let responseObject = {
 					data: []
 				}
-				rows.forEach(el => {
+				result.rows.forEach(el => {
 					roomImage = {
 					image: el.image,
 					title: el.name,
@@ -910,7 +910,7 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
 				let responseObject = {
 					data: []
 				}
-				rows.forEach(el => {
+				result.rows.forEach(el => {
 					hotelData = {
 					type: xhrResponse[i].type,
 						attributes: {
