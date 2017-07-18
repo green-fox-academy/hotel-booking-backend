@@ -1027,7 +1027,7 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
         const has_restaurant = req.body.data.attributes.has_restaurant;
         const has_bar = req.body.data.attributes.has_bar;
         const has_swimming_pool = req.body.data.attributes.has_swimming_pool;
-        const has_air_condition = req.body.data.attributes.has_air_condition;
+        const has_air_condition = req.body.data.attributes.has_air_conditioning;
         const has_gym = req.body.data.attributes.has_gym;
         const name = req.body.data.attributes.name;
         const meal_plan = req.body.data.attributes.meal_plan;
@@ -1048,14 +1048,6 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
         });
     });
 
-
-    // app.post('/api/hotels/', (req, res) => {
-    //       let newHotel = Object.assign(rowHotel, req.body);
-    //       newHotel.data.id = 11;
-    //       hotelResponse.data.push(newHotel.data);
-    //       res.status(201).send(newHotel);
-    // });
-
       app.post('/api/hotels2/', (req, res) => {
         if (req.body[0].adults) {
          res.status(201).send(hotelResponse);
@@ -1064,20 +1056,36 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
   
     app.get('/api/hotels/:id', (req, res) => {
         const hotelID = req.params.id;
-        hotelResponse.data.forEach((hotel) => {
-            if (hotelID == hotel.id) {
-                let oneHotel = {
-                    links: {
-                        self: 'https://two-ferns.glitch.me/hotels/1'
-                    },
-                    data: hotel
-                }
-                res.status(200).send(oneHotel);
-                hotelResponse.push(hotel)
+        let response = {};
+        pool.query('SELECT * FROM ' + hotels + ' WHERE hotel_id = $1', [hotelID], function(err, result) {
+            if(err) {
+                res.send({ 'error': err.message })
+            } else {
+                response = (Object.assign({}, hotelSample))
+                response.hotel_id = result.rows[0].hotel_id;
+                response.type = result.rows[0].type;
+                response.attributes = Object.assign(result.rows[0])
+                res.send(response);                  
             }
         });
-        res.status(404).send(hotelError);
     });
+
+    // app.get('/api/hotels/:id', (req, res) => {
+    //     const hotelID = req.params.id;
+    //     hotelResponse.data.forEach((hotel) => {
+    //         if (hotelID == hotel.id) {
+    //             let oneHotel = {
+    //                 links: {
+    //                     self: 'https://two-ferns.glitch.me/hotels/1'
+    //                 },
+    //                 data: hotel
+    //             }
+    //             res.status(200).send(oneHotel);
+    //             hotelResponse.push(hotel)
+    //         }
+    //     });
+    //     res.status(404).send(hotelError);
+    // });
   
      app.delete('/api/hotels/:id', (req, res) => {
         const hotelID = req.params.id;
@@ -1087,10 +1095,10 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
                 'error': err.message
                 }); 
             } else {
-                res.send('alma')
+                res.send(result)
             }
         }
-        res.send('bela')
+        res.send(res)
     });
 
     app.patch('/api/hotels/:id', (req, res) => {
