@@ -1080,14 +1080,18 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
         const hotelID = req.params.id;
         pool.query('DELETE FROM ' + hotels +' WHERE hotel_id = $1', [hotelID]), function(err, result) {
             if(err) {
-                res.send({
-                'error': 'szar az egesz'
+                res.json({
+                'error': err.message
                 }); 
             } else {
-                res.send(result)
+                res.json({
+                    'status': 'ok'
+                })
             }
         }
-        res.send(res)
+        res.json({
+            'status': 'ok'
+        })
     });
 
     app.patch('/api/hotels/:id', (req, res) => {
@@ -1108,19 +1112,17 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
         let response = {data:{}};        
         const columns = 'has_wifi = $1, has_parking = $2, has_pets = $3, has_restaurant = $4, has_bar = $5, has_swimming_pool = $6, has_air_conditioning = $7, has_gym = $8, name = $9, meal_plan = $10, stars = $11, location = $12, main_image_src = $13 ';
         //const values = ' VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)';
-        const valueList = [has_wifi, has_parking, has_pets, has_restaurant, has_bar, has_swimming_pool, has_air_condition, has_gym, name, meal_plan, stars, location, main_image_src]
+        const valueList = [has_wifi, has_parking, has_pets, has_restaurant, has_bar, has_swimming_pool, has_air_condition, has_gym, name, meal_plan, stars, location, main_image_src, hotelID]
         // pool.query('UPDATE ' + hotels + 'SET ' + columns + ' RETURNING *', valueList, function(err, result) {
-        pool.query('UPDATE ' + hotels + ' SET '+ columns  + ' WHERE hotel_id = 19', valueList, function(err, result) {          
+        pool.query('UPDATE ' + hotels + ' SET '+ columns  + ' WHERE hotel_id = $14', valueList, function(err, result) {          
             if(err) {
-                res.send({
+                res.json({
                     'error': err.message
                 });
             } else {
-                response.data = (Object.assign({}, hotelSample))
-                response.data.hotel_id = result.rows[0].hotel_id;
-                response.data.type = result.rows[0].type;
-                response.data.attributes = Object.assign(result.rows[0])
-                res.send(response);
+                res.json({
+                    'status': 'ok'
+                })
             }
         });
     });
