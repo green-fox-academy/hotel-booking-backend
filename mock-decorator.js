@@ -735,13 +735,13 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
     }
 
     //----------USER FRONTEND NEW ENDPOINTS------------------
-    app.get('/testhotels/', (req, res) => {
+    app.get('/testhotels/', (req, res) => { //works
         pool.query('SELECT * FROM ' + hotels, function(err, result) {
             res.json(result.rows)
         })
     });
     
-    app.get('/testrooms/', (req, res) => {
+    app.get('/testrooms/', (req, res) => { //works
         pool.query('SELECT * FROM ' + rooms, function(err, result) {
             res.json(result.rows)
         })
@@ -755,7 +755,7 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
 		return 0;
 	};
 
-	app.get('/toprooms', (req, res) => {
+	app.get('/toprooms', (req, res) => { //works
         pool.query('SELECT * FROM ' + rooms, function(err, result) {
 			if(err) {
                 res.json({
@@ -780,7 +780,7 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
         })
     });
 
-	app.get('/roomdetails', (req, res) => {
+	app.get('/roomdetails', (req, res) => { //works
         pool.query('SELECT * FROM ' + rooms, function(err, result) {
 			if(err) {
                 res.json({
@@ -860,7 +860,7 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
 		})
     });
 
-	app.get('/hotel-slider', (req, res) => {
+	app.get('/hotel-slider', (req, res) => { //works
         pool.query('SELECT * FROM ' + hotels, function(err, result) {
 			if(err) {
                 res.json({
@@ -896,7 +896,7 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
 				result.rows.forEach(el => {
 					roomImage = {
 					image: el.image,
-					title: el.name,
+					title: el.room_name,
 					subtitle: el.subtitle,
 					}
 					responseObject.data.push(roomImage)
