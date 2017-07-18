@@ -1081,7 +1081,7 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
         pool.query('DELETE FROM ' + hotels +' WHERE hotel_id = $1', [hotelID]), function(err, result) {
             if(err) {
                 res.send({
-                'error': err.message
+                'error': 'szar az egesz'
                 }); 
             } else {
                 res.send(result)
@@ -1110,7 +1110,7 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
         //const values = ' VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)';
         const valueList = [has_wifi, has_parking, has_pets, has_restaurant, has_bar, has_swimming_pool, has_air_condition, has_gym, name, meal_plan, stars, location, main_image_src]
         // pool.query('UPDATE ' + hotels + 'SET ' + columns + ' RETURNING *', valueList, function(err, result) {
-        pool.query('UPDATE ' + hotels + ' SET '+ columns  + ' WHERE hotel_id = 19' + ' RETURNING *', valueList, function(err, result) {          
+        pool.query('UPDATE ' + hotels + ' SET '+ columns  + ' WHERE hotel_id = 19', valueList, function(err, result) {          
             if(err) {
                 res.send({
                     'error': err.message
