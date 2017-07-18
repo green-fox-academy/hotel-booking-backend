@@ -736,13 +736,13 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
 
     //----------USER FRONTEND NEW ENDPOINTS------------------
     app.get('/testhotels/', (req, res) => {
-        pool.query('SELECT * FROM ' + hotels, function(err, rows) {
+        pool.query('SELECT * FROM ' + hotels, function(err, result) {
             res.json(result.rows)
         })
     });
     
     app.get('/testrooms/', (req, res) => {
-        pool.query('SELECT * FROM ' + rooms, function(err, rows) {
+        pool.query('SELECT * FROM ' + rooms, function(err, result) {
             res.json(result.rows)
         })
     });
@@ -753,10 +753,10 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
 		if (a.stars > b.stars)
 			return 1;
 		return 0;
-	}
+	};
 
 	app.get('/toprooms', (req, res) => {
-        pool.query('SELECT * FROM ' + rooms, function(err, rows) {
+        pool.query('SELECT * FROM ' + rooms, function(err, result) {
 			if(err) {
                 res.json({
                   'error': err.message
@@ -765,7 +765,7 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
 				let responseObject = {
 					data: []
 				}
-				let topThree = rows.sort(compare).slice(0,3);
+				let topThree = result.rows.sort(compare).slice(0,3);
 				topThree.forEach(el => {
 					let topHotel = {
 					image: el.image,
@@ -781,7 +781,7 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
     });
 
 	app.get('/roomdetails', (req, res) => {
-        pool.query('SELECT * FROM ' + rooms, function(err, rows) {
+        pool.query('SELECT * FROM ' + rooms, function(err, result) {
 			if(err) {
                 res.json({
                   'error': err.message
@@ -790,7 +790,7 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
 				let responseObject = {
 					data: []
 				}
-				rows.forEach(el => {
+				result.rows.forEach(el => {
 					roomDetail = {
 						title: el.room_name,
 						description: el.decription,
@@ -804,7 +804,7 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
     });
 
 	app.get('/mapsearch', (req, res) => {
-        pool.query('SELECT * FROM ' + hotels, function(err, rows) {
+        pool.query('SELECT * FROM ' + hotels, function(err, result) {
 			if(err) {
                 res.json({
                   'error': err.message
@@ -813,7 +813,7 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
 				let responseObject = {
 					data: []
 				}
-				rows.forEach(el => {
+				result.rows.forEach(el => {
 					locData = {
 						latitude: el.latitude,
 						longitude: el.longitude,
@@ -829,23 +829,23 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
 
 	app.get('/roomfeatures/:id', (req, res) => {
 		const roomId = req.params.id;
-        pool.query('SELECT * FROM ' + hotels, function(err, rows) {
+        pool.query('SELECT * FROM ' + hotels, function(err, result) {
 			if(err) {
                 res.json({
                   'error': err.message
                 });
 			} else {
-				if (roomId === rows.room_id) {
+				if (roomId === result.rows.room_id) {
 					let responseObject = {
 						data: {
-							has_wifi: rows.has_wifi,
-							has_parking: rows.has_parking,
-							has_pets: rows.has_pets,
-							has_restaurant: rows.has_restaurant,
-							has_bar: rows.has_bar,
-							has_swimming_pool: rows.has_swimming_pool,
-							has_air_conditioning: rows.has_air_conditioning,
-							has_gym: rows.has_gym,
+							has_wifi: result.rows.has_wifi,
+							has_parking: result.rows.has_parking,
+							has_pets: result.rows.has_pets,
+							has_restaurant: result.rows.has_restaurant,
+							has_bar: result.rows.has_bar,
+							has_swimming_pool: result.rows.has_swimming_pool,
+							has_air_conditioning: result.rows.has_air_conditioning,
+							has_gym: result.rows.has_gym,
 						}
 					}
 				}	
@@ -855,7 +855,7 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
     });
 
 	app.get('/hotel-slider', (req, res) => {
-        pool.query('SELECT * FROM ' + hotels, function(err, rows) {
+        pool.query('SELECT * FROM ' + hotels, function(err, result) {
 			if(err) {
                 res.json({
                   'error': err.message
@@ -864,7 +864,7 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
 				let responseObject = {
 					data: []
 				}
-				rows.forEach(el => {
+				result.rows.forEach(el => {
 					hotelImage = {
 					image: el.main_image_src,
 					title: el.name,
@@ -878,7 +878,7 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
     });
 
 	app.get('/room-slider', (req, res) => {
-        pool.query('SELECT * FROM ' + rooms, function(err, rows) {
+        pool.query('SELECT * FROM ' + rooms, function(err, result) {
 			if(err) {
                 res.json({
                   'error': err.message
@@ -887,7 +887,7 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
 				let responseObject = {
 					data: []
 				}
-				rows.forEach(el => {
+				result.rows.forEach(el => {
 					roomImage = {
 					image: el.image,
 					title: el.name,
@@ -901,7 +901,7 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
     });
 
 	app.get('/hotel-search', (req, res) => {
-        pool.query('SELECT * FROM ' + hotels, function(err, rows) {
+        pool.query('SELECT * FROM ' + hotels, function(err, result) {
 			if(err) {
                 res.json({
                   'error': err.message
@@ -910,31 +910,31 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
 				let responseObject = {
 					data: []
 				}
-				rows.forEach(el => {
+				result.rows.forEach(el => {
 					hotelData = {
-					type: xhrResponse[i].type,
-						attributes: {
-							hotel_id: el.hotel_id,
-							location: el.location,
-							longitude: el.longitude,
-							latitude: el.latitude,
-							name: el.name,
-							main_image_src: el.main_image_src,
-							has_wifi: el.has_wifi,
-							has_parking: el.has_parking,
-							has_pets: el.has_pets,
-							has_restaurant: el.has_restaurant,
-							has_bar: el.has_bar,
-							has_swimming_pool: el.has_swimming_pool,
-							has_air_conditioning: el.has_air_conditioning,
-							has_gym: el.has_gym,
-							meal_plan: el.meal_plan,
-							user_id: el.user_id,
-							booking_id: el.booking_id,
-							amount: el.amount,
-							currency: el.currency,
-							status: el.status,
-							stars: el.stars
+					type: el.type,
+					attributes: {
+						hotel_id: el.hotel_id,
+						location: el.location,
+						longitude: el.longitude,
+						latitude: el.latitude,
+						name: el.name,
+						main_image_src: el.main_image_src,
+						has_wifi: el.has_wifi,
+						has_parking: el.has_parking,
+						has_pets: el.has_pets,
+						has_restaurant: el.has_restaurant,
+						has_bar: el.has_bar,
+						has_swimming_pool: el.has_swimming_pool,
+						has_air_conditioning: el.has_air_conditioning,
+						has_gym: el.has_gym,
+						meal_plan: el.meal_plan,
+						user_id: el.user_id,
+						booking_id: el.booking_id,
+						amount: el.amount,
+						currency: el.currency,
+						status: el.status,
+						stars: el.stars
 						}
 					}
 					responseObject.data.push(hotelData)
