@@ -1005,7 +1005,7 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
         commonHotels.data = [];
         pool.query('SELECT * FROM ' + hotels, function(err, result) {
             if(err) {
-                res.json({ 'error': err.message })
+                res.send({ 'error': err.message })
             } else {
                 for (let i = 0; i < result.rows.length; i++) {
                     commonHotels.data.push(Object.assign({}, hotelSample))
@@ -1038,7 +1038,7 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
         const valueList = [has_wifi, has_parking, has_pets, has_restaurant, has_bar, has_swimming_pool, has_air_condition, has_gym, name, meal_plan, stars, location]
         pool.query('INSERT INTO ' + hotels + columns + values + ' RETURNING *', valueList, function(err, result) {
             if(err) {
-                res.json({
+                res.send({
                     'error': err.message
                 });
             } else {
@@ -1082,7 +1082,7 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
         const hotelID = req.params.id;
         pool.query('DELETE FROM ' + hotels +' WHERE hotel_id = $1', [hotelID]), function(err, result) {
             if(err) {
-                res.json({
+                res.send({
                 'error': err.message
                 }); 
             } else {
