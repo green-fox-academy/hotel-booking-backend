@@ -838,14 +838,14 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
 				if (roomId === result.rows.room_id) {
 					let responseObject = {
 						data: {
-							has_wifi: rows.has_wifi,
-							has_parking: rows.has_parking,
-							has_pets: rows.has_pets,
-							has_restaurant: rows.has_restaurant,
-							has_bar: rows.has_bar,
-							has_swimming_pool: rows.has_swimming_pool,
-							has_air_conditioning: rows.has_air_conditioning,
-							has_gym: rows.has_gym,
+							has_wifi: result.rows.has_wifi,
+							has_parking: result.rows.has_parking,
+							has_pets: result.rows.has_pets,
+							has_restaurant: result.rows.has_restaurant,
+							has_bar: result.rows.has_bar,
+							has_swimming_pool: result.rows.has_swimming_pool,
+							has_air_conditioning: result.rows.has_air_conditioning,
+							has_gym: result.rows.has_gym,
 						}
 					}
 				}	
