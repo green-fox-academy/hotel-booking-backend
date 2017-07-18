@@ -1062,15 +1062,15 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
   
     app.get('/api/hotels/:id', (req, res) => {
         const hotelID = req.params.id;
-        let response = {};
+        let response = {data:{}};
         pool.query('SELECT * FROM ' + hotels + ' WHERE hotel_id = $1', [hotelID], function(err, result) {
             if(err) {
                 res.send({ 'error': err.message })
             } else {
-                response = (Object.assign({}, hotelSample))
-                response.hotel_id = result.rows[0].hotel_id;
-                response.type = result.rows[0].type;
-                response.attributes = Object.assign(result.rows[0])
+                response.data = (Object.assign({}, hotelSample))
+                response.data.hotel_id = result.rows[0].hotel_id;
+                response.data.type = result.rows[0].type;
+                response.data.attributes = Object.assign(result.rows[0])
                 res.send(response);                  
             }
         });
