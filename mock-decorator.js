@@ -912,29 +912,29 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
 				}
 				result.rows.forEach(el => {
 					hotelData = {
-					type: xhrResponse[i].type,
-						attributes: {
-							hotel_id: el.hotel_id,
-							location: el.location,
-							longitude: el.longitude,
-							latitude: el.latitude,
-							name: el.name,
-							main_image_src: el.main_image_src,
-							has_wifi: el.has_wifi,
-							has_parking: el.has_parking,
-							has_pets: el.has_pets,
-							has_restaurant: el.has_restaurant,
-							has_bar: el.has_bar,
-							has_swimming_pool: el.has_swimming_pool,
-							has_air_conditioning: el.has_air_conditioning,
-							has_gym: el.has_gym,
-							meal_plan: el.meal_plan,
-							user_id: el.user_id,
-							booking_id: el.booking_id,
-							amount: el.amount,
-							currency: el.currency,
-							status: el.status,
-							stars: el.stars
+					type: el.type,
+					attributes: {
+						hotel_id: el.hotel_id,
+						location: el.location,
+						longitude: el.longitude,
+						latitude: el.latitude,
+						name: el.name,
+						main_image_src: el.main_image_src,
+						has_wifi: el.has_wifi,
+						has_parking: el.has_parking,
+						has_pets: el.has_pets,
+						has_restaurant: el.has_restaurant,
+						has_bar: el.has_bar,
+						has_swimming_pool: el.has_swimming_pool,
+						has_air_conditioning: el.has_air_conditioning,
+						has_gym: el.has_gym,
+						meal_plan: el.meal_plan,
+						user_id: el.user_id,
+						booking_id: el.booking_id,
+						amount: el.amount,
+						currency: el.currency,
+						status: el.status,
+						stars: el.stars
 						}
 					}
 					responseObject.data.push(hotelData)
