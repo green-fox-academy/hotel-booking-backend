@@ -835,21 +835,27 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
                   'error': err.message
                 });
 			} else {
-				if (roomId === result.rows.room_id) {
-					let responseObject = {
-						data: {
-							has_wifi: result.rows.has_wifi,
-							has_parking: result.rows.has_parking,
-							has_pets: result.rows.has_pets,
-							has_restaurant: result.rows.has_restaurant,
-							has_bar: result.rows.has_bar,
-							has_swimming_pool: result.rows.has_swimming_pool,
-							has_air_conditioning: result.rows.has_air_conditioning,
-							has_gym: result.rows.has_gym,
+				let responseObject = {
+					data: []
+				}
+				result.rows.forEach(el => {
+					if (roomId === el.room_id) {
+						let featureData = {
+							data: {
+								has_wifi: el.has_wifi,
+								has_parking: el.has_parking,
+								has_pets: el.has_pets,
+								has_restaurant: el.has_restaurant,
+								has_bar: el.has_bar,
+								has_swimming_pool: el.has_swimming_pool,
+								has_air_conditioning: el.has_air_conditioning,
+								has_gym: el.has_gym,
+							}
 						}
-					}
-				}	
-				res.json(responseObject)
+					responseObject.data.push(featureData)
+					}			
+				})	
+				res.json(responseObject)	
 			}
 		})
     });
