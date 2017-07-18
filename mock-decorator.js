@@ -728,13 +728,13 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
 
     //----------USER FRONTEND NEW ENDPOINTS------------------
     app.get('/testhotels/', (req, res) => {
-        pool.query('SELECT * FROM ' + hotels, function(err, rows) {
+        pool.query('SELECT * FROM ' + hotels, function(err, result) {
             res.json(result.rows)
         })
     });
     
     app.get('/testrooms/', (req, res) => {
-        pool.query('SELECT * FROM ' + rooms, function(err, rows) {
+        pool.query('SELECT * FROM ' + rooms, function(err, result) {
             res.json(result.rows)
         })
     });
@@ -745,10 +745,10 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
 		if (a.stars > b.stars)
 			return 1;
 		return 0;
-	}
+	};
 
 	app.get('/toprooms', (req, res) => {
-        pool.query('SELECT * FROM ' + rooms, function(err, rows) {
+        pool.query('SELECT * FROM ' + rooms, function(err, result) {
 			if(err) {
                 res.json({
                   'error': err.message
@@ -773,7 +773,7 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
     });
 
 	app.get('/roomdetails', (req, res) => {
-        pool.query('SELECT * FROM ' + rooms, function(err, rows) {
+        pool.query('SELECT * FROM ' + rooms, function(err, result) {
 			if(err) {
                 res.json({
                   'error': err.message
@@ -796,7 +796,7 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
     });
 
 	app.get('/mapsearch', (req, res) => {
-        pool.query('SELECT * FROM ' + hotels, function(err, rows) {
+        pool.query('SELECT * FROM ' + hotels, function(err, result) {
 			if(err) {
                 res.json({
                   'error': err.message
@@ -821,7 +821,7 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
 
 	app.get('/roomfeatures/:id', (req, res) => {
 		const roomId = req.params.id;
-        pool.query('SELECT * FROM ' + hotels, function(err, rows) {
+        pool.query('SELECT * FROM ' + hotels, function(err, result) {
 			if(err) {
                 res.json({
                   'error': err.message
@@ -847,7 +847,7 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
     });
 
 	app.get('/hotel-slider', (req, res) => {
-        pool.query('SELECT * FROM ' + hotels, function(err, rows) {
+        pool.query('SELECT * FROM ' + hotels, function(err, result) {
 			if(err) {
                 res.json({
                   'error': err.message
@@ -870,7 +870,7 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
     });
 
 	app.get('/room-slider', (req, res) => {
-        pool.query('SELECT * FROM ' + rooms, function(err, rows) {
+        pool.query('SELECT * FROM ' + rooms, function(err, result) {
 			if(err) {
                 res.json({
                   'error': err.message
@@ -893,7 +893,7 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
     });
 
 	app.get('/hotel-search', (req, res) => {
-        pool.query('SELECT * FROM ' + hotels, function(err, rows) {
+        pool.query('SELECT * FROM ' + hotels, function(err, result) {
 			if(err) {
                 res.json({
                   'error': err.message
