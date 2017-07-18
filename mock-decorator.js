@@ -1075,23 +1075,6 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
             }
         });
     });
-
-    // app.get('/api/hotels/:id', (req, res) => {
-    //     const hotelID = req.params.id;
-    //     hotelResponse.data.forEach((hotel) => {
-    //         if (hotelID == hotel.id) {
-    //             let oneHotel = {
-    //                 links: {
-    //                     self: 'https://two-ferns.glitch.me/hotels/1'
-    //                 },
-    //                 data: hotel
-    //             }
-    //             res.status(200).send(oneHotel);
-    //             hotelResponse.push(hotel)
-    //         }
-    //     });
-    //     res.status(404).send(hotelError);
-    // });
   
      app.delete('/api/hotels/:id', (req, res) => {
         const hotelID = req.params.id;
@@ -1109,21 +1092,37 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
 
     app.patch('/api/hotels/:id', (req, res) => {
         const hotelID = req.params.id;
-        hotelResponse.data.forEach((hotel, index) => {
-            if (hotelID == hotel.id) {
-                // hotel.attributes = Object.assign(req.body);
-                // res.status(200).send(hotel);
-                let oneHotel = {
-                    links: {
-                        self: 'https://two-ferns.glitch.me/hotels/1'
-                    },
-                    data: req.body
-                };
-                hotelResponse.data.splice(index, 1, req.body);
-                res.status(200).send(oneHotel);
+        const has_wifi = req.body.data.attributes.has_wifi;
+        const has_parking = req.body.data.attributes.has_parking;
+        const has_pets = req.body.data.attributes.has_pets;
+        const has_restaurant = req.body.data.attributes.has_restaurant;
+        const has_bar = req.body.data.attributes.has_bar;
+        const has_swimming_pool = req.body.data.attributes.has_swimming_pool;
+        const has_air_condition = req.body.data.attributes.has_air_conditioning;
+        const has_gym = req.body.data.attributes.has_gym;
+        const name = req.body.data.attributes.name;
+        const meal_plan = req.body.data.attributes.meal_plan;
+        const stars = req.body.data.attributes.stars;
+        const location = req.body.data.attributes.location;
+        const main_image_src = req.body.data.attributes.main_image_src;
+        let response = {data:{}};        
+        const columns = 'has_wifi = $1, has_parking = $2, has_pets = $3, has_restaurant = $4, has_bar = $5, has_swimming_pool = $6, has_air_conditioning = $7, has_gym = $8, name = $9, meal_plan = $10, stars = $11, location = $12, main_image_src = $13 ';
+        //const values = ' VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)';
+        const valueList = [has_wifi, has_parking, has_pets, has_restaurant, has_bar, has_swimming_pool, has_air_condition, has_gym, name, meal_plan, stars, location, main_image_src]
+        // pool.query('UPDATE ' + hotels + 'SET ' + columns + ' RETURNING *', valueList, function(err, result) {
+        pool.query('UPDATE ' + hotels + ' SET '+ columns  + ' WHERE hotel_id = 19' + ' RETURNING *', valueList, function(err, result) {          
+            if(err) {
+                res.send({
+                    'error': err.message
+                });
+            } else {
+                response.data = (Object.assign({}, hotelSample))
+                response.data.hotel_id = result.rows[0].hotel_id;
+                response.data.type = result.rows[0].type;
+                response.data.attributes = Object.assign(result.rows[0])
+                res.send(response);
             }
         });
-        res.status(404).send(hotelError);
     });
   
     app.post('/api/hotels/:hotelId/relationships/rooms', (req, res) => {
