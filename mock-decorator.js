@@ -1021,11 +1021,39 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
   
   // NORMA FRONTEND NOT WORKING
     app.post('/api/hotels/', (req, res) => {
-          let newHotel = Object.assign(rowHotel, req.body);
-          newHotel.data.id = 11;
-          hotelResponse.data.push(newHotel.data);
-          res.status(201).send(newHotel);
+        const has_wifi = req.body.data.attributes.has_wifi;
+        const has_parking = req.body.data.attributes.has_parking;
+        const has_pets = req.body.data.attributes.has_pets;
+        const has_restaurant = req.body.data.attributes.has_restaurant;
+        const has_bar = req.body.data.attributes.has_bar;
+        const has_swimming_pool = req.body.data.attributes.has_swimming_pool;
+        const has_air_condition = req.body.data.attributes.has_air_condition;
+        const has_gym = req.body.data.attributes.has_gym;
+        const name = req.body.data.attributes.name;
+        const meal_plan = req.body.data.attributes.meal_plan;
+        const stars = req.body.data.attributes.stars;
+        const location = req.body.data.attributes.location;
+        const columns = ' (has_wifi, has_parking, has_pets, has_restaurant, has_bar, has_swimming_pool, has_air_condition, has_gym, name, meal_plan, stars, location)';
+        const values = ' VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)';
+        const valueList = [has_wifi, has_parking, has_pets, has_restaurant, has_bar, has_swimming_pool, has_air_condition, has_gym, name, meal_plan, stars, location]
+        pool.query('INSERT INTO ' + hotels + columns + values + ' RETURNING *', valueList, function(err, result) {
+            if(err) {
+                res.json({
+                    'error': err.message
+                });
+            } else {
+                res.json('alma');
+            }
+        });
     });
+
+
+    // app.post('/api/hotels/', (req, res) => {
+    //       let newHotel = Object.assign(rowHotel, req.body);
+    //       newHotel.data.id = 11;
+    //       hotelResponse.data.push(newHotel.data);
+    //       res.status(201).send(newHotel);
+    // });
 
       app.post('/api/hotels2/', (req, res) => {
         if (req.body[0].adults) {
