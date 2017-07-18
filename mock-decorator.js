@@ -1033,9 +1033,10 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
         const meal_plan = req.body.data.attributes.meal_plan;
         const stars = req.body.data.attributes.stars;
         const location = req.body.data.attributes.location;
-        const columns = ' (has_wifi, has_parking, has_pets, has_restaurant, has_bar, has_swimming_pool, has_air_conditioning, has_gym, name, meal_plan, stars, location)';
-        const values = ' VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)';
-        const valueList = [has_wifi, has_parking, has_pets, has_restaurant, has_bar, has_swimming_pool, has_air_condition, has_gym, name, meal_plan, stars, location]
+        const main_image_src = req.body.data.attributes.main_image_src;
+        const columns = ' (has_wifi, has_parking, has_pets, has_restaurant, has_bar, has_swimming_pool, has_air_conditioning, has_gym, name, meal_plan, stars, location, main_image_src)';
+        const values = ' VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)';
+        const valueList = [has_wifi, has_parking, has_pets, has_restaurant, has_bar, has_swimming_pool, has_air_condition, has_gym, name, meal_plan, stars, location, main_image_src]
         pool.query('INSERT INTO ' + hotels + columns + values + ' RETURNING *', valueList, function(err, result) {
             if(err) {
                 res.send({
