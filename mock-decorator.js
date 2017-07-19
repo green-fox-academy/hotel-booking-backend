@@ -559,15 +559,15 @@ const MockServer = function(app) {
     });
 
     app.post('/api/hotels/:hotelId/relationships/rooms', (req, res) => {
-        const type = req.body.data.type;
-        const hotel_id = req.body.data.id;
-        const price = req.body.data.attributes.price;
-        const currency = req.body.data.attributes.currency;
-        const room_name = req.body.data.attributes.room_name;
-        const subtitle = req.body.data.attributes.subtitle;
-        const image = req.body.data.attributes.image;
-        const description = req.body.data.attributes.description;
-        const max_occupancy = req.body.data.attributes.max_occupancy;
+        const type = req.body.type;
+        const hotel_id = req.body.id;
+        const price = req.body.attributes.price;
+        const currency = req.body.attributes.currency;
+        const room_name = req.body.attributes.room_name;
+        const subtitle = req.body.attributes.subtitle;
+        const image = req.body.attributes.image;
+        const description = req.body.attributes.description;
+        const max_occupancy = req.body.attributes.max_occupancy;
         
         const columns = ' (type, hotel_id, price, currency, room_name, subtitle, image, description, max_occupancy)';
         const values = ' VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)';
