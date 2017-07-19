@@ -560,7 +560,7 @@ const MockServer = function(app) {
 
     app.post('/api/hotels/:hotelId/relationships/rooms', (req, res) => {
         const type = req.body.type;
-        const hotel_id = req.body.id;
+        const hotel_id = req.params.hotelID;
         const price = req.body.attributes.price;
         const currency = req.body.attributes.currency;
         const room_name = req.body.attributes.room_name;
