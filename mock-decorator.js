@@ -1128,7 +1128,28 @@ app.get("/hotel-slider", function (request, response) { //to be changed to /room
     });
   
     app.post('/api/hotels/:hotelId/relationships/rooms', (req, res) => {
-        res.status(201).send(req.body);
+        const type = req.body.data.type;
+        const hotel_id = req.body.data.id;
+        const price = req.body.data.attributes.price;
+        const currency = req.body.data.attributes.currency;
+        const room_name = req.body.data.attributes.room_name;
+        const subtitle = req.body.data.attributes.subtitle;
+        const image = req.body.data.attributes.image;
+        const description = req.body.data.attributes.description;
+        const max_occupancy = req.body.data.attributes.max_occupancy;
+        
+        const columns = ' (type, hotel_id, price, currency, room_name, subtitle, image, description, max_occupancy)';
+        const values = ' VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)';
+        const valueList = [type, hotel_id, price, currency, room_name, subtitle, image, description, max_occupancy];
+        pool.query('INSERT INTO ' + rooms + columns + values + ' RETURNING *', valueList, function(err, result) {
+            if(err) {
+                res.send({
+                    'error': err.message
+                });
+            } else {
+                res.json('ok');
+            }
+        });
     })
   
     app.get('/api/hotels/:hotelId/relationships/rooms', (req, res) => {
