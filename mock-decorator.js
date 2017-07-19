@@ -585,8 +585,9 @@ const MockServer = function(app) {
     })
 
     app.get('/api/hotels/:hotelId/relationships/rooms', (req, res) => {
+        hotel_id = req.params.hotelId;
         commonRooms.data = [];
-        pool.query('SELECT * FROM ' + rooms, function(err, result) {
+        pool.query('SELECT * FROM ' + rooms + 'WHERE hotel_id = $1', [hotel_id], function(err, result) {
             if (err) {
                 res.json({ 'error': err.message })
             } else {
