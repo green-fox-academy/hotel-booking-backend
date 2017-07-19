@@ -605,13 +605,20 @@ const MockServer = function(app) {
 
     app.delete('/api/hotels/:hotelId/relationships/rooms/:roomId', (req, res) => {
         const roomID = req.params.roomId;
-        roomResponse.data.forEach((room, index) => {
-            if (roomID == room.id) {
-                roomResponse.data = roomResponse.data.filter(e => e !== room)
-                res.status(200).send(roomResponse.links);
+        pool.query('DELETE FROM ' + rooms +' WHERE room_id = $1', [roomID]), function(err, result) {
+            if(err) {
+                res.json({
+                'error': err.message
+                });
+            } else {
+                res.json({
+                    'status': 'ok'
+                })
             }
-        });
-        res.status(404).send(roomError)
+        }
+        res.json({
+            'status': 'ok'
+        })
     });
 };
 
